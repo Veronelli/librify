@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "librify"
+version = "0.1.0"
+description = "Librify is a web application that allows you to organize and manage your personal digital library"
+authors = ["Facundo Veronelli <fveronelli@gruposimpli.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
