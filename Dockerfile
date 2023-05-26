@@ -33,5 +33,5 @@ COPY . .
 # Expose the port on which the FastAPI application will run (change it to the appropriate port used by your FastAPI app)
 EXPOSE 8000
 
-# Start the FastAPI application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start the FastAPI application with live reloading using Uvicorn
+CMD uvicorn main:app --reload --host 0.0.0.0 --port 8000
