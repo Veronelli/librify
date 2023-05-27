@@ -4,4 +4,4 @@ app = APIRouter()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "server is running"}
