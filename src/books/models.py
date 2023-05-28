@@ -11,10 +11,9 @@ class BooksBase(BaseModel):
     category:str = Field(...)
 
 class Book(BooksBase):
-    id:UUID4 = Field(..., alias="_id", default_factory=UUID4)
+    id:ObjectId = Field(..., alias="_id", )
 
     class Config:
-        orm_mode = True
         json_encoders = {
-
+            "ObjectId": str
         }

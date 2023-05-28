@@ -9,3 +9,24 @@ services:
       - ./:/app
     env_file:
       - .env
+    networks:
+      - librify_net
+
+  mongodb:
+    image: mongo:6.0.4
+    container_name: mongodb_librify
+    volumes:
+      - librify_db:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - librify_net
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+volumes:
+  librify_db:
+
+networks:
+  librify_net: {}
