@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from src.config import settings
+from src.config.envs import settings
 app = APIRouter()
 
 @app.get("/")
