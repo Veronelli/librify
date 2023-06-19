@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from uuid import uuid3
+from pydantic import UUID4, BaseModel
 from bson import ObjectId
 
 
@@ -7,7 +8,7 @@ class UserBase(BaseModel):
     email: str
 
 class User(UserBase):
-    id: ObjectId
+    id: UUID4
     is_active: bool
 
     class Config:

@@ -18,7 +18,7 @@ class MongoDB:
             password (str): The password for authentication. Defaults to None.
         """
         self.client = MongoClient(host, port, username=username, password=password)
-        self.db = self.client['your_database_name']
+        self.db = self.client['libriry']
 
     def insert_document(self, collection_name: str, document: str) -> InsertOneResult:
         """
