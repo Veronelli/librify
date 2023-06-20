@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field, validator
+
 from bson import ObjectId
 from uuid import UUID
 
@@ -10,7 +11,7 @@ class UserBase(BaseModel):
 
 
 class User(UserBase):
-    id: str
+    id: str = Field(alias="_id")
 
     class Config:
         json_encoders = {ObjectId: str}

@@ -18,7 +18,7 @@ class MongoDB:
             password (str): The password for authentication. Defaults to None.
         """
         self.client = MongoClient(host, port, username=username, password=password)
-        self.db = self.client['libriry']
+        self.db = self.client['librify']
 
     def insert_document(self, collection_name: str, document: str) -> InsertOneResult:
         """
@@ -34,7 +34,7 @@ class MongoDB:
         collection: Collection = self.db[collection_name]
         return collection.insert_one(document)
 
-    def find_documents(self, collection_name: str, query: Query) -> MongoResponse:
+    def find_documents(self, collection_name: str, query: Query | None  = None) -> MongoResponse:
         """
         Find documents in a collection based on a query.
 
@@ -46,7 +46,24 @@ class MongoDB:
             pymongo.cursor.Cursor: A cursor to iterate over the matched documents.
         """
         collection: Collection = self.db[collection_name]
+        if query is None:
+            return collection.find()
+        
         return collection.find(query)
+    
+    def find_one(self, collection_name:str, query: Query) -> MongoResponse:
+        """
+        Find one document in a collection based on a query.
+
+        Args:
+            collection_name (str): The name of the collection.
+            query (Query): The query used to filter the documents.
+
+        Returns:
+            pymongo.cursor.Cursor: A cursor to iterate over the matched documents.
+        """
+        collection: Collection = self.db[collection_name]
+        return collection.find_one(query)
 
     def update_document(self, collection_name: str, query: Query, update: Any) -> UpdateResult:
         """
