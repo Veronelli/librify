@@ -1,8 +1,8 @@
-from fastapi import APIRouter
+from fastapi import FastAPI
 from src.config.envs import settings
 from src.users.routes import route
 
-app = APIRouter()
+app = FastAPI()
 
 app.include_router(route)
 

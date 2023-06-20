@@ -12,6 +12,7 @@ fastapi = "^0.95.2"
 uvicorn = "^0.22.0"
 bson = "^0.5.10"
 pymongo = "^4.3.3"
+pydantic = {extras = ["email"], version = "^1.10.9"}
 
 
 [build-system]

@@ -1,15 +1,22 @@
-from uuid import uuid3
-from pydantic import UUID4, BaseModel
+from pydantic import BaseModel, EmailStr, Field, validator
 from bson import ObjectId
+from uuid import UUID
 
 
 class UserBase(BaseModel):
     username: str
-    email: str
+    email: EmailStr
+    is_active: bool= Field(default=False)
+
 
 class User(UserBase):
-    id: UUID4
-    is_active: bool
+    id: str
 
     class Config:
         json_encoders = {ObjectId: str}
+
+    @validator("id")
+    def validate_object_id(cls, value):
+        if not ObjectId.is_valid(value):
+            raise ValueError("Invalid ObjectId")
+        return value
