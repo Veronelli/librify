@@ -34,7 +34,7 @@ class MongoDB:
         collection: Collection = self.db[collection_name]
         return collection.insert_one(document)
 
-    def find_documents(self, collection_name: str, query: Query | None  = None) -> MongoResponse:
+    def find_documents(self, collection_name: str, offset:int|None = None, limit:int|None=None) -> MongoResponse:
         """
         Find documents in a collection based on a query.
 
@@ -46,10 +46,10 @@ class MongoDB:
             pymongo.cursor.Cursor: A cursor to iterate over the matched documents.
         """
         collection: Collection = self.db[collection_name]
-        if query is None:
-            return collection.find()
+        offset = offset or 0
+        limit = limit or 10
+        return collection.find().skip(offset).limit(limit)
         
-        return collection.find(query)
     
     def find_one(self, collection_name:str, query: Query) -> MongoResponse:
         """

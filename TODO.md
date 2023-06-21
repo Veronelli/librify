@@ -5,7 +5,7 @@
 
 [ ] - Crear endpoint CRUD de usuarios
 
-    * LIST [ ]
+    * LIST [x]
     * ID [x]
     * CREATE [x]
     * UPDATE [ ]
@@ -17,6 +17,9 @@
 
 [ ] - Refector project
         * Create collection constant
+            ** Collection Name
+            ** DB Name
+            ** Limit / Offset
         * Add return mongo functions
         * Async mongo queries
         * user ["_id"] -> user["id"]
