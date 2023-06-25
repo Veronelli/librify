@@ -31,12 +31,15 @@ async def register(user: Annotated[UserBase, Body()])->User:
     return await register_user(user)
 
 @route.put("/update/{id}")
-async def update(id:Annotated[str,Path()],user: Annotated[UserBase, Body()])->User:
-    return await update_user(id,user)
+async def update(
+    id: Annotated[str,Path()],
+    user: Annotated[UserBase, Body()]
+    )->User:
+    return await update_user(id, user)
 
 @route.delete("/delete/{id}")
-def delete(id:Annotated[str,Path()]):
-    deleted_user = delete_user(id)
+async def delete(id:Annotated[str,Path()]):
+    deleted_user = await delete_user(id)
     return {
         "message":"User deleted",
         "user": deleted_user

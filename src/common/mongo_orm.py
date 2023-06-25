@@ -67,7 +67,7 @@ class MongoDB:
         """
         return await self.db[collection_name].update_one(query, {"$set": update})
 
-    def delete_document(self, collection_name: str, query: Query) -> DeleteResult:
+    async def delete_document(self, collection_name: str, query: Query) -> DeleteResult:
         """
         Delete multiple documents from a collection based on a query.
 
@@ -78,8 +78,7 @@ class MongoDB:
         Returns:
             pymongo.results.DeleteResult: The result of the delete operation.
         """
-        collection: Collection = self.db[collection_name]
-        return collection.delete_many(query)
+        return await self.db[collection_name].delete_one(query)
 
     def drop_collection(self, collection_name: str) -> None:
         """

@@ -56,7 +56,6 @@ async def register_user(user: UserBase) -> dict[str, Any]:
         dict[str, Any]: The response containing the inserted user document.
     """
     response: InsertOneResult = await db.insert_document("users", user.dict())
-    print(response.inserted_id)
     user_response = User(**user.dict(), _id=str(response.inserted_id))
     return user_response
 
@@ -88,5 +87,5 @@ async def delete_user(id: str) -> dict[str, Any]:
     """
     query = {"_id": ObjectId(id)}
     user = await find_user(id)
-    response = db.delete_document("users", query)
+    response = await db.delete_document("users", query)
     return user
