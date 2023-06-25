@@ -31,8 +31,8 @@ def register(user: Annotated[UserBase, Body()])->User:
     return register_user(user)
 
 @route.put("/update/{id}")
-def update(id:Annotated[str,Path()],user: Annotated[UserBase, Body()])->User:
-    return update_user(id,user)
+async def update(id:Annotated[str,Path()],user: Annotated[UserBase, Body()])->User:
+    return await update_user(id,user)
 
 @route.delete("/delete/{id}")
 def delete(id:Annotated[str,Path()]):

@@ -58,7 +58,7 @@ def register_user(user: UserBase) -> dict[str, Any]:
     user_response = User(**user.dict(), id=str(response.inserted_id))
     return user_response
 
-def update_user(id: str, user: UserBase) -> dict[str, Any]:
+async def update_user(id: str, user: UserBase) -> dict[str, Any]:
     """
     Update a user.
 
@@ -70,7 +70,7 @@ def update_user(id: str, user: UserBase) -> dict[str, Any]:
         dict[str, Any]: The response containing the updated user document.
     """
     query = {"_id": ObjectId(id)}
-    db.update_document("users", query, user.dict(by_alias=True))
+    await db.update_document("users", query, user.dict(by_alias=True))
     user_response = User(**user.dict(by_alias=True), _id=id)
     return user_response
 

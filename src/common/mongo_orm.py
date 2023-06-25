@@ -54,7 +54,7 @@ class MongoDB:
         return documents
         
     
-    def update_document(self, collection_name: str, query: Query, update: Any) -> UpdateResult:
+    async def update_document(self, collection_name: str, query: Query, update: Any) -> UpdateResult:
         """
         Update multiple documents in a collection based on a query and an update operation.
 
@@ -66,8 +66,7 @@ class MongoDB:
         Returns:
             pymongo.results.UpdateResult: The result of the update operation.
         """
-        collection: Collection = self.db[collection_name]
-        return collection.update_many(query, {"$set": update})
+        return await self.db[collection_name].update_one(query, {"$set": update})
 
     def delete_document(self, collection_name: str, query: Query) -> DeleteResult:
         """
