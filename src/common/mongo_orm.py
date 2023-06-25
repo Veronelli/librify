@@ -78,7 +78,7 @@ class MongoDB:
             pymongo.results.UpdateResult: The result of the update operation.
         """
         collection: Collection = self.db[collection_name]
-        return collection.update_many(query, update)
+        return collection.update_many(query, {"$set": update})
 
     def delete_document(self, collection_name: str, query: Query) -> DeleteResult:
         """

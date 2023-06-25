@@ -4,6 +4,7 @@ from src.common.mongo_orm import MongoDB
 from bson import ObjectId
 from src.config.envs import settings
 from src.users.models import User, UserBase
+from src.users.utils import find_user
 
 db = MongoDB(
     host="mongodb_librify",
@@ -22,10 +23,7 @@ def find_user_by_id(id: str) -> dict[str, Any]:
     Returns:
         dict[str, Any]: The user document as a dictionary.
     """
-    query = {"_id": ObjectId(id)}
-    user = db.find_one("users", query)
-    user["_id"] = str(user["_id"])
-    return user
+    return find_user(id)
 
 
 def find_all_users(offset: int | None = None, limit: int | None = None) -> list[User]:
@@ -59,3 +57,34 @@ def register_user(user: UserBase) -> dict[str, Any]:
     response = db.insert_document("users", user.dict())
     user_response = User(**user.dict(), id=str(response.inserted_id))
     return user_response
+
+def update_user(id: str, user: UserBase) -> dict[str, Any]:
+    """
+    Update a user.
+
+    Args:
+        id (str): The ID of the user.
+        user (UserBase): The user data.
+
+    Returns:
+        dict[str, Any]: The response containing the updated user document.
+    """
+    query = {"_id": ObjectId(id)}
+    db.update_document("users", query, user.dict(by_alias=True))
+    user_response = User(**user.dict(by_alias=True), _id=id)
+    return user_response
+
+def delete_user(id: str) -> dict[str, Any]:
+    """
+    Delete a user.
+
+    Args:
+        id (str): The ID of the user.
+
+    Returns:
+        dict[str, Any]: The response containing the deleted user document.
+    """
+    query = {"_id": ObjectId(id)}
+    user = find_user(id)
+    response = db.delete_document("users", query)
+    return user

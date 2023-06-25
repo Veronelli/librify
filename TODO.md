@@ -8,10 +8,11 @@
     * LIST [x]
     * ID [x]
     * CREATE [x]
-    * UPDATE [ ]
-    * DELETE [ ]
+    * UPDATE [x]
+    * DELETE [x]
 
 [ ] - Crear test de unidad
+
 
 [ ] - Crear test de integracion
 
