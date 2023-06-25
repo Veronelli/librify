@@ -22,7 +22,7 @@ class MongoDB:
         self.client = motor.motor_asyncio.AsyncIOMotorClient(uri_with_auth)
         self.db = self.client["librify"]
 
-    def insert_document(self, collection_name: str, document: str) -> InsertOneResult:
+    async def insert_document(self, collection_name: str, document: str) -> Any:
         """
         Insert a new document into a collection.
 
@@ -33,8 +33,7 @@ class MongoDB:
         Returns:
             pymongo.results.InsertOneResult: The result of the insert operation.
         """
-        collection: Collection = self.db[collection_name]
-        return collection.insert_one(document)
+        return await self.db[collection_name].insert_one(document)
 
     async def find_documents(self, collection_name: str, offset:int|None = None, limit:int|None=None) -> list[dict[str, any]]:
         """
@@ -54,7 +53,7 @@ class MongoDB:
         return documents
         
     
-    async def update_document(self, collection_name: str, query: Query, update: Any) -> UpdateResult:
+    async def update_document(self, collection_name: str, query: Query, update: Any) -> Any:
         """
         Update multiple documents in a collection based on a query and an update operation.
 

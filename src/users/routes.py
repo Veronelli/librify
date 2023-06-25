@@ -27,8 +27,8 @@ async def get(offset:int|None =None,limit:int|None =None):
     return users
 
 @route.post("/register", response_model=User)
-def register(user: Annotated[UserBase, Body()])->User:
-    return register_user(user)
+async def register(user: Annotated[UserBase, Body()])->User:
+    return await register_user(user)
 
 @route.put("/update/{id}")
 async def update(id:Annotated[str,Path()],user: Annotated[UserBase, Body()])->User:

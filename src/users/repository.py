@@ -1,6 +1,7 @@
 from typing import Any
 
 from src.common.mongo_orm import MongoDB
+from pymongo.results import InsertOneResult
 from bson import ObjectId
 from src.config.envs import settings
 from src.users.models import User, UserBase
@@ -44,7 +45,7 @@ async def find_all_users(offset: int | None = None, limit: int | None = None) ->
     return [User(**user) for user in users]
 
 
-def register_user(user: UserBase) -> dict[str, Any]:
+async def register_user(user: UserBase) -> dict[str, Any]:
     """
     Register a new user.
 
@@ -54,8 +55,9 @@ def register_user(user: UserBase) -> dict[str, Any]:
     Returns:
         dict[str, Any]: The response containing the inserted user document.
     """
-    response = db.insert_document("users", user.dict())
-    user_response = User(**user.dict(), id=str(response.inserted_id))
+    response: InsertOneResult = await db.insert_document("users", user.dict())
+    print(response.inserted_id)
+    user_response = User(**user.dict(), _id=str(response.inserted_id))
     return user_response
 
 async def update_user(id: str, user: UserBase) -> dict[str, Any]:
