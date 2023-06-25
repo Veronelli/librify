@@ -26,7 +26,7 @@ def find_user_by_id(id: str) -> dict[str, Any]:
     return find_user(id)
 
 
-def find_all_users(offset: int | None = None, limit: int | None = None) -> list[User]:
+async def find_all_users(offset: int | None = None, limit: int | None = None) -> list[User]:
     """
     Find all users.
 
@@ -37,7 +37,7 @@ def find_all_users(offset: int | None = None, limit: int | None = None) -> list[
     Returns:
         list[User]: A list of User objects.
     """
-    users_response = db.find_documents("users", offset=offset, limit=limit)
+    users_response = await db.find_documents("users", offset=offset, limit=limit)
     users = [user for user in users_response]
     for user in users:
         user["_id"] = str(user["_id"])

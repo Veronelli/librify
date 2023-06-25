@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from typing import Any
 from pymongo.collection import Collection
 from pymongo.results import DeleteResult, InsertOneResult, UpdateResult
+import motor.motor_asyncio
 
 MongoResponse = dict[str,Any] | list[dict[str,Any]]
 Query = dict[str,Any]
@@ -17,8 +18,9 @@ class MongoDB:
             username (str): The username for authentication. Defaults to None.
             password (str): The password for authentication. Defaults to None.
         """
-        self.client = MongoClient(host, port, username=username, password=password)
-        self.db = self.client['librify']
+        uri_with_auth = f"mongodb://{username}:{password}@{host}:{port}"
+        self.client = motor.motor_asyncio.AsyncIOMotorClient(uri_with_auth)
+        self.db = self.client["librify"]
 
     def insert_document(self, collection_name: str, document: str) -> InsertOneResult:
         """
@@ -34,7 +36,7 @@ class MongoDB:
         collection: Collection = self.db[collection_name]
         return collection.insert_one(document)
 
-    def find_documents(self, collection_name: str, offset:int|None = None, limit:int|None=None) -> MongoResponse:
+    async def find_documents(self, collection_name: str, offset:int|None = None, limit:int|None=None) -> Any:
         """
         Find documents in a collection based on a query.
 
@@ -45,10 +47,11 @@ class MongoDB:
         Returns:
             pymongo.cursor.Cursor: A cursor to iterate over the matched documents.
         """
-        collection: Collection = self.db[collection_name]
-        offset = offset or 0
-        limit = limit or 10
-        return collection.find().skip(offset).limit(limit)
+        cursor = self.db[collection_name].find()
+        documents = []
+        async for document in cursor:
+            documents.append(document)
+        return documents
         
     
     def find_one(self, collection_name:str, query: Query) -> MongoResponse:

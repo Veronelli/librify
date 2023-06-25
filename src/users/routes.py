@@ -23,7 +23,7 @@ async def get_all(id:Annotated[str,Path()]):
 
 @route.get("/list")
 async def get(offset:int|None =None,limit:int|None =None):
-    users = find_all_users(offset,limit)
+    users = await find_all_users(offset,limit)
     return users
 
 @route.post("/register", response_model=User)
