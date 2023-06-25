@@ -22,5 +22,4 @@
             ** DB Name
             ** Limit / Offset
         * Add return mongo functions
-        * Async mongo queries
         * user ["_id"] -> user["id"]
