@@ -36,7 +36,7 @@ class MongoDB:
         collection: Collection = self.db[collection_name]
         return collection.insert_one(document)
 
-    async def find_documents(self, collection_name: str, offset:int|None = None, limit:int|None=None) -> Any:
+    async def find_documents(self, collection_name: str, offset:int|None = None, limit:int|None=None) -> list[dict[str, any]]:
         """
         Find documents in a collection based on a query.
 
@@ -54,20 +54,6 @@ class MongoDB:
         return documents
         
     
-    def find_one(self, collection_name:str, query: Query) -> MongoResponse:
-        """
-        Find one document in a collection based on a query.
-
-        Args:
-            collection_name (str): The name of the collection.
-            query (Query): The query used to filter the documents.
-
-        Returns:
-            pymongo.cursor.Cursor: A cursor to iterate over the matched documents.
-        """
-        collection: Collection = self.db[collection_name]
-        return collection.find_one(query)
-
     def update_document(self, collection_name: str, query: Query, update: Any) -> UpdateResult:
         """
         Update multiple documents in a collection based on a query and an update operation.

@@ -16,7 +16,7 @@ db = MongoDB(
 
 @route.get("/list/{id}")
 async def get_all(id:Annotated[str,Path()]):
-    user = find_user_by_id(id)
+    user = await find_user_by_id(id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return User(**user)

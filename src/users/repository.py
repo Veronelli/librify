@@ -13,7 +13,7 @@ db = MongoDB(
     )
 
 
-def find_user_by_id(id: str) -> dict[str, Any]:
+async def find_user_by_id(id: str) -> dict[str, Any]:
     """
     Find a user by their ID.
 
@@ -23,7 +23,7 @@ def find_user_by_id(id: str) -> dict[str, Any]:
     Returns:
         dict[str, Any]: The user document as a dictionary.
     """
-    return find_user(id)
+    return await find_user(id)
 
 
 async def find_all_users(offset: int | None = None, limit: int | None = None) -> list[User]:
@@ -74,7 +74,7 @@ def update_user(id: str, user: UserBase) -> dict[str, Any]:
     user_response = User(**user.dict(by_alias=True), _id=id)
     return user_response
 
-def delete_user(id: str) -> dict[str, Any]:
+async def delete_user(id: str) -> dict[str, Any]:
     """
     Delete a user.
 
@@ -85,6 +85,6 @@ def delete_user(id: str) -> dict[str, Any]:
         dict[str, Any]: The response containing the deleted user document.
     """
     query = {"_id": ObjectId(id)}
-    user = find_user(id)
+    user = await find_user(id)
     response = db.delete_document("users", query)
     return user
