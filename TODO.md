@@ -3,7 +3,7 @@
 
 [ ] - Implementar libreria
 
-[ ] - Crear endpoint CRUD de usuarios
+[x] - Crear endpoint CRUD de usuarios
 
     * LIST [x]
     * ID [x]
@@ -13,6 +13,7 @@
 
 [ ] - Crear test de unidad
 
+[ ] - Login endpoint
 
 [ ] - Crear test de integracion
 
