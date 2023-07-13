@@ -5,8 +5,8 @@ from uuid import UUID
 
 
 class UserBase(BaseModel):
-    username: str
-    email: EmailStr
+    username: str = Field(...)
+    email: EmailStr = Field(...)
     is_active: bool= Field(default=False)
 
 

@@ -47,6 +47,7 @@ class MongoDB:
             pymongo.cursor.Cursor: A cursor to iterate over the matched documents.
         """
         cursor = self.db[collection_name].find()
+        breakpoint()
         documents = []
         async for document in cursor:
             documents.append(document)

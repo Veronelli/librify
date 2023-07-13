@@ -40,6 +40,7 @@ async def find_all_users(offset: int | None = None, limit: int | None = None) ->
     """
     users_response = await db.find_documents("users", offset=offset, limit=limit)
     users = [user for user in users_response]
+    breakpoint()
     for user in users:
         user["_id"] = str(user["_id"])
     return [User(**user) for user in users]
