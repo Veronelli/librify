@@ -11,7 +11,9 @@
     * UPDATE [x]
     * DELETE [x]
 
-[ ] - Crear test de unidad
+[ ] - Crear test de unidad <-
+
+[ ] - Script to access to the terminal
 
 [ ] - Login endpoint
 
