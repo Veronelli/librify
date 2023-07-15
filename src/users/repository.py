@@ -1,18 +1,11 @@
 from typing import Any
 
-from src.common.mongo_orm import MongoDB
+from src.common.mongo_orm import connectMongoDB
 from pymongo.results import InsertOneResult
 from bson import ObjectId
 from src.config.envs import settings
 from src.users.models import User, UserBase
 from src.users.utils import find_user
-
-db = MongoDB(
-    host="mongodb_librify",
-    username=settings.MONGO_INITDB_ROOT_USERNAME,
-    password=settings.MONGO_INITDB_ROOT_PASSWORD
-    )
-
 
 async def find_user_by_id(id: str) -> dict[str, Any]:
     """
@@ -38,6 +31,8 @@ async def find_all_users(offset: int | None = None, limit: int | None = None) ->
     Returns:
         list[User]: A list of User objects.
     """
+    db = connectMongoDB()
+
     users_response = await db.find_documents("users", offset=offset, limit=limit)
     users = [user for user in users_response]
     breakpoint()
@@ -56,6 +51,8 @@ async def register_user(user: UserBase) -> dict[str, Any]:
     Returns:
         dict[str, Any]: The response containing the inserted user document.
     """
+    db = connectMongoDB()
+
     response: InsertOneResult = await db.insert_document("users", user.dict())
     user_response = User(**user.dict(), _id=str(response.inserted_id))
     return user_response
@@ -71,6 +68,8 @@ async def update_user(id: str, user: UserBase) -> dict[str, Any]:
     Returns:
         dict[str, Any]: The response containing the updated user document.
     """
+    db = connectMongoDB()
+
     query = {"_id": ObjectId(id)}
     await db.update_document("users", query, user.dict(by_alias=True))
     user_response = User(**user.dict(by_alias=True), _id=id)
@@ -86,6 +85,8 @@ async def delete_user(id: str) -> dict[str, Any]:
     Returns:
         dict[str, Any]: The response containing the deleted user document.
     """
+    db = connectMongoDB()
+
     query = {"_id": ObjectId(id)}
     user = await find_user(id)
     response = await db.delete_document("users", query)

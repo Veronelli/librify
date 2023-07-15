@@ -1,17 +1,8 @@
 from typing import Any
 from bson import ObjectId
 
-from src.common.mongo_orm import MongoDB
+from src.common.mongo_orm import connectMongoDB
 from src.config.envs import settings
-
-
-db = MongoDB(
-    host="mongodb_librify",
-    username=settings.MONGO_INITDB_ROOT_USERNAME,
-    password=settings.MONGO_INITDB_ROOT_PASSWORD
-    )
-
-
 
 async def find_user(id: str) -> dict[str, Any]:
     """
@@ -23,6 +14,7 @@ async def find_user(id: str) -> dict[str, Any]:
     Returns:
         dict[str, Any]: The user document as a dictionary.
     """
+    db = connectMongoDB()
     query = {"_id": ObjectId(id)}
     users = await db.find_documents("users", query)
     for user in users:

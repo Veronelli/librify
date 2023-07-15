@@ -7,12 +7,6 @@ from src.common.mongo_orm import MongoDB
 from src.users.repository import find_user_by_id, find_all_users, register_user, update_user, delete_user
 
 route = APIRouter(prefix="/users",tags=["Users"])
-db = MongoDB(
-    host="mongodb_librify",
-    username=settings.MONGO_INITDB_ROOT_USERNAME,
-    password=settings.MONGO_INITDB_ROOT_PASSWORD
-    )
-
 
 @route.get("/list/{id}")
 async def get_all(id:Annotated[str,Path()]):

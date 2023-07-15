@@ -3,6 +3,7 @@ from typing import Any
 from pymongo.collection import Collection
 from pymongo.results import DeleteResult, InsertOneResult, UpdateResult
 import motor.motor_asyncio
+from src.config.envs import settings
 
 MongoResponse = dict[str,Any] | list[dict[str,Any]]
 Query = dict[str,Any]
@@ -18,6 +19,7 @@ class MongoDB:
             username (str): The username for authentication. Defaults to None.
             password (str): The password for authentication. Defaults to None.
         """
+        breakpoint()
         uri_with_auth = f"mongodb://{username}:{password}@{host}:{port}"
         self.client = motor.motor_asyncio.AsyncIOMotorClient(uri_with_auth)
         self.db = self.client["librify"]
@@ -47,7 +49,6 @@ class MongoDB:
             pymongo.cursor.Cursor: A cursor to iterate over the matched documents.
         """
         cursor = self.db[collection_name].find()
-        breakpoint()
         documents = []
         async for document in cursor:
             documents.append(document)
@@ -90,3 +91,10 @@ class MongoDB:
         """
         collection: Collection = self.db[collection_name]
         collection.drop()
+
+def connectMongoDB():
+    return MongoDB(
+        host="mongodb_librify",
+        username=settings.MONGO_INITDB_ROOT_USERNAME or 'root',
+        password=settings.MONGO_INITDB_ROOT_PASSWORD or 'root'
+        )
