@@ -2,6 +2,9 @@
 
 Librify is an online platform that aims to revolutionize the way people discover, share, and enjoy books. It provides a vibrant community for book lovers to connect, explore a vast collection of titles, and engage in discussions.
 
+### Note
+This project needs to run with docker compose v2
+
 ## Features
 
 - **Book Recommendations:** Librify offers personalized book recommendations based on users' reading preferences, allowing them to discover new authors and genres.

@@ -13,7 +13,7 @@ services:
       - librify_net
 
   mongodb:
-    image: mongo:6.0.4
+    image: mongo:5.0.4
     container_name: mongodb_librify
     volumes:
       - librify_db:/data/db
