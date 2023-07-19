@@ -7,12 +7,12 @@ WORKDIR /app
 # Install system dependencies needed for building Python packages and virtualenv
 RUN apk add --no-cache build-base libffi-dev openssl-dev python3-dev
 
-# Install virtualenv
-RUN pip install --no-cache-dir virtualenv
+ENV VIRTUAL_ENV=/venv
+RUN python3.11 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 RUN pip install --no-cache-dir uvicorn
 
-# Create a virtual environment
-RUN virtualenv /venv
 
 # Activate the virtual environment
 ENV PATH="/venv/bin:$PATH"
@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir poetry
 COPY pyproject.toml poetry.lock ./
 
 # Install project dependencies using Poetry within the virtual environment
-RUN poetry config virtualenvs.create false \
+RUN poetry config virtualenvs.create true \
     && poetry install --no-root --no-dev
 
 # Copy the entire project directory (assuming it's in the same directory as the Dockerfile) to the working directory
