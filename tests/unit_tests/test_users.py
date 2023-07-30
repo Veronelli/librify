@@ -11,3 +11,11 @@ async def test_list_user_is_success(app_client: TestClient, mock_mongo_motor_cli
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == mocked_users
 
+
+@pytest.mark.anyio
+async def test_get_user_is_success(app_client: TestClient, mock_mongo_motor_client, mocked_users: list[dict[str, Any]]):
+    users = mocked_users[0]
+    response = await app_client.get(f"/users/list/{users['_id']}")
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == users
+
