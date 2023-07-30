@@ -5,7 +5,6 @@ from httpx import AsyncClient
 
 from main import app
 from fastapi.testclient import TestClient
-from tests.unit_tests.mock_models import MockDataBaseClient
 
 pytest_plugins = [
     "tests.unit_tests.fixtures.user_fixtures",
