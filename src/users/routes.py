@@ -9,14 +9,14 @@ from src.users.repository import find_user_by_id, find_all_users, register_user,
 route = APIRouter(prefix="/users",tags=["Users"])
 
 @route.get("/list/{id}")
-async def get_all(id:Annotated[str,Path()]):
+async def get(id:Annotated[str,Path()]):
     user = await find_user_by_id(id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return User(**user)
 
 @route.get("/list")
-async def get(offset:int|None =None,limit:int|None =None):
+async def get_all(offset:int|None =None,limit:int|None =None):
     users = await find_all_users(offset,limit)
     return users
 

@@ -19,7 +19,6 @@ class MongoDB:
             username (str): The username for authentication. Defaults to None.
             password (str): The password for authentication. Defaults to None.
         """
-        breakpoint()
         uri_with_auth = f"mongodb://{username}:{password}@{host}:{port}"
         self.client = motor.motor_asyncio.AsyncIOMotorClient(uri_with_auth)
         self.db = self.client["librify"]
@@ -48,6 +47,7 @@ class MongoDB:
         Returns:
             pymongo.cursor.Cursor: A cursor to iterate over the matched documents.
         """
+
         cursor = self.db[collection_name].find()
         documents = []
         async for document in cursor:

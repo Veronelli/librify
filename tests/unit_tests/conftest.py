@@ -1,3 +1,4 @@
+from typing import Any
 import pytest
 from fastapi import FastAPI
 from httpx import AsyncClient
@@ -6,24 +7,14 @@ from main import app
 from fastapi.testclient import TestClient
 from tests.unit_tests.mock_models import MockDataBaseClient
 
-@pytest.fixture()
-def collection_factory():
-    return {
-        "test":"TEST",
-    }
+pytest_plugins = [
+    "tests.unit_tests.fixtures.user_fixtures",
+    "tests.unit_tests.fixtures.mongo_fixtures"
+]
 
 @pytest.fixture
-def mock_mongo_motor_client(mocker, collection_factory):
-    client_mock = mocker.patch(
-        "motor.motor_asyncio.AsyncIOMotorClient",
-        return_value=MockDataBaseClient
-        )
-    breakpoint()
-    client_mock.return_value.get_database = mocker.Mock()
-    client_mock.return_value.get_database.return_value.get_collection = mocker.Mock(
-        side_effect=lambda collection: collection_factory[collection]
-    )
-
+def anyio_backend() -> str:
+    return "asyncio"
 
 @pytest.fixture
 def load_enviroment(monkeypatch):
@@ -41,7 +32,7 @@ def load_enviroment(monkeypatch):
         )
 
 @pytest.fixture
-def app(load_enviroment: None, mock_mongo_motor_client) -> FastAPI:
+def app(load_enviroment: None) -> FastAPI:
     from main import app
     return app
 
