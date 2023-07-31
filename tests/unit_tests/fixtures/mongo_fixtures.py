@@ -8,7 +8,7 @@ from tests.unit_tests.mock_collection.user_collection import MockUserCollection
 def collection_factory():
     return {
         "librify":{
-            'users': MockUserCollection
+            'users': MockUserCollection()
         },
     }
 
@@ -25,4 +25,3 @@ def mock_mongo_motor_client(mocker, collection_factory):
         return_value=mock_db
         )
     client_mock.AsyncIOMotorClient.return_value = collection_factory
-    return client_mock

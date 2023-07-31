@@ -11,9 +11,9 @@ route = APIRouter(prefix="/users",tags=["Users"])
 @route.get("/list/{id}")
 async def get(id:Annotated[str,Path()]):
     user = await find_user_by_id(id)
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    return User(**user)
+    if user == []:
+        raise HTTPException(status_code=404)
+    return user[0]
 
 @route.get("/list")
 async def get_all(offset:int|None =None,limit:int|None =None):

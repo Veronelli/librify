@@ -5,7 +5,17 @@ from pymongo.results import InsertOneResult
 from bson import ObjectId
 from src.config.envs import settings
 from src.users.models import User, UserBase
-from src.users.utils import find_user
+from bson import ObjectId
+
+async def find(query: dict[str,Any]|None=None, offset: int|None=None, limit: dict[str, Any]|None=None):
+    db = connectMongoDB()
+
+    users_response = await db.find_documents("users", offset=offset, limit=limit, query=query)
+    users = [user for user in users_response]
+    for user in users:
+        user["_id"] = str(user["_id"])
+
+    return [User(**user) for user in users]
 
 async def find_user_by_id(id: str) -> dict[str, Any]:
     """
@@ -17,7 +27,8 @@ async def find_user_by_id(id: str) -> dict[str, Any]:
     Returns:
         dict[str, Any]: The user document as a dictionary.
     """
-    return await find_user(id)
+    query = {'_id': ObjectId(id)}
+    return await find(query=query)
 
 
 async def find_all_users(offset: int | None = None, limit: int | None = None) -> list[User]:
@@ -31,14 +42,7 @@ async def find_all_users(offset: int | None = None, limit: int | None = None) ->
     Returns:
         list[User]: A list of User objects.
     """
-    db = connectMongoDB()
-
-    users_response = await db.find_documents("users", offset=offset, limit=limit)
-    users = [user for user in users_response]
-    for user in users:
-        user["_id"] = str(user["_id"])
-    return [User(**user) for user in users]
-
+    return await find()
 
 async def register_user(user: UserBase) -> dict[str, Any]:
     """

@@ -36,7 +36,7 @@ class MongoDB:
         """
         return await self.db[collection_name].insert_one(document)
 
-    async def find_documents(self, collection_name: str, offset:int|None = None, limit:int|None=None) -> list[dict[str, any]]:
+    async def find_documents(self, collection_name: str, offset:int|None = None, limit:int|None=None, query: dict[str,Any]|None=None) -> list[dict[str, any]]:
         """
         Find documents in a collection based on a query.
 
@@ -48,7 +48,7 @@ class MongoDB:
             pymongo.cursor.Cursor: A cursor to iterate over the matched documents.
         """
 
-        cursor = self.db[collection_name].find()
+        cursor = self.db[collection_name].find(query)
         documents = []
         async for document in cursor:
             documents.append(document)
