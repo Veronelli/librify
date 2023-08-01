@@ -1,4 +1,6 @@
 from typing import Any
+
+from bson import ObjectId
 from tests.unit_tests.fixtures.results.users_results import MOCKED_USERS
 from tests.unit_tests.interfaces import IAsyncIOMotorClient
 
@@ -6,10 +8,18 @@ async def iterable(list):
     for item in list:
         yield item
 
+
+class InsertOneResult():
+    @property
+    def inserted_id(self) -> Any:
+        """The inserted document's _id."""
+        return ObjectId()
+
+
 class MockUserCollection(IAsyncIOMotorClient):
     
-    async def insert_one(self, collection, document, *args, **kwargs):
-        pass
+    async def insert_one(self, document, *args, **kwargs):
+        return InsertOneResult()
 
     @classmethod
     def find(cls, query: dict[str, Any]|None=None, *args, **kwargs):

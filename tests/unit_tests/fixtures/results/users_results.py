@@ -18,4 +18,10 @@ MOCKED_USER_3 = {
   "_id": "64c68bdf5fea470202e17541"
 }
 
+MOCKED_USER_4 = {
+  "username": "ncuevas",
+  "email": "ncuevas@example.com",
+  "is_active": True,
+}
+
 MOCKED_USERS = [MOCKED_USER_1,MOCKED_USER_2,MOCKED_USER_3]

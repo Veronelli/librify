@@ -57,6 +57,7 @@ async def register_user(user: UserBase) -> dict[str, Any]:
     db = connectMongoDB()
 
     response: InsertOneResult = await db.insert_document("users", user.dict())
+    
     user_response = User(**user.dict(), _id=str(response.inserted_id))
     return user_response
 
