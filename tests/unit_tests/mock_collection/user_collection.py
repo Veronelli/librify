@@ -1,4 +1,5 @@
 from typing import Any
+from pymongo.results import UpdateResult
 
 from bson import ObjectId
 from tests.unit_tests.fixtures.results.users_results import MOCKED_USERS
@@ -17,7 +18,6 @@ class InsertOneResult():
 
 
 class MockUserCollection(IAsyncIOMotorClient):
-    
     async def insert_one(self, document, *args, **kwargs):
         return InsertOneResult()
 
@@ -31,5 +31,14 @@ class MockUserCollection(IAsyncIOMotorClient):
     async def delete_one(self, collection, filter, *args, **kwargs):
         pass
 
-    async def update_one(self, collection, filter, update, *args, **kwargs):
-        pass
+    async def update_one(self, query, update, *args, **kwargs):
+        users = [user async for user in self.find(query=query)]
+        if users is None:
+            return UpdateResult(
+                raw_result={"n": 0, "nModified": 0, "ok": 0.0, "updatedExisting": False},
+                acknowledged=False
+            )
+        return UpdateResult(
+            raw_result={"n": 0, "nModified": 1, "ok": 1.0, "updatedExisting": True},
+            acknowledged=True
+        )

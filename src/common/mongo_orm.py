@@ -1,8 +1,9 @@
 from pymongo import MongoClient
 from typing import Any
 from pymongo.collection import Collection
-from pymongo.results import DeleteResult, InsertOneResult, UpdateResult
+from pymongo.results import DeleteResult
 import motor.motor_asyncio
+
 from src.config.envs import settings
 
 MongoResponse = dict[str,Any] | list[dict[str,Any]]

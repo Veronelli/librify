@@ -23,7 +23,7 @@ async def test_get_user_is_success(app_client: TestClient, mock_mongo_motor_clie
 
 
 @pytest.mark.anyio
-async def test_get_user_is_failed_due_invalid_id(app_client: TestClient, mock_mongo_motor_client, mocked_users: list[dict[str, Any]]):
+async def test_get_user_is_failed_due_invalid_id(app_client: TestClient, mock_mongo_motor_client):
     response = await app_client.get(f"/users/list/{ObjectId()}")
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -47,3 +47,15 @@ async def test_register_user_is_failed_due_bad_request(app_client: TestClient, m
         f"/users/register",
         json=user)
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+@pytest.mark.anyio
+async def test_update_user_is_success(app_client: TestClient, mock_mongo_motor_client, mocked_users, create_user:dict[str, Any]):
+    user = create_user
+    response = await app_client.put(
+        f"/users/update/{mocked_users[2]['_id']}",
+        json=user)
+    content = response.json()
+    user['_id'] = mocked_users[2]['_id']
+    assert response.status_code == status.HTTP_200_OK
+    assert content == user

@@ -1,9 +1,8 @@
 from typing import Annotated
-from fastapi import APIRouter, Body, HTTPException, Path, Query
-from bson import ObjectId
-from src.config.envs import settings
+from fastapi import APIRouter, Body, HTTPException, Path
+from pymongo.errors import WriteError
 from src.users.models import User, UserBase
-from src.common.mongo_orm import MongoDB
+from fastapi import status
 from src.users.repository import find_user_by_id, find_all_users, register_user, update_user, delete_user
 
 route = APIRouter(prefix="/users",tags=["Users"])
@@ -29,7 +28,11 @@ async def update(
     id: Annotated[str,Path()],
     user: Annotated[UserBase, Body()]
     )->User:
-    return await update_user(id, user)
+    try:
+        return await update_user(id, user)
+    except WriteError as e:
+        raise HTTPException(e.code)
+        
 
 @route.delete("/delete/{id}")
 async def delete(id:Annotated[str,Path()]):
