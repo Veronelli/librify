@@ -59,3 +59,13 @@ async def test_update_user_is_success(app_client: TestClient, mock_mongo_motor_c
     user['_id'] = mocked_users[2]['_id']
     assert response.status_code == status.HTTP_200_OK
     assert content == user
+
+
+@pytest.mark.anyio
+async def test_update_user_is_failed_due_not_found_or_not_updated(app_client: TestClient, mock_mongo_motor_client, mocked_users, create_user:dict[str, Any]):
+    user = create_user
+    response = await app_client.put(
+        f"/users/update/{str(ObjectId())}",
+        json=user)
+    content = response.json()
+    assert response.status_code == status.HTTP_404_NOT_FOUND

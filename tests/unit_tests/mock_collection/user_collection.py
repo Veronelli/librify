@@ -33,7 +33,7 @@ class MockUserCollection(IAsyncIOMotorClient):
 
     async def update_one(self, query, update, *args, **kwargs):
         users = [user async for user in self.find(query=query)]
-        if users is None:
+        if users == []:
             return UpdateResult(
                 raw_result={"n": 0, "nModified": 0, "ok": 0.0, "updatedExisting": False},
                 acknowledged=False
