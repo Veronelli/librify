@@ -95,6 +95,5 @@ async def delete_user(id: str) -> dict[str, Any]:
     db = connectMongoDB()
 
     query = {"_id": ObjectId(id)}
-    user = await find_user(id)
     response = await db.delete_document("users", query)
-    return user
+    return response

@@ -28,8 +28,11 @@ class MockUserCollection(IAsyncIOMotorClient):
             return iterable(users)
         return iterable(MOCKED_USERS)
 
-    async def delete_one(self, collection, filter, *args, **kwargs):
-        pass
+    async def delete_one(self, query, *args, **kwargs):
+        for item in MOCKED_USERS:
+            if item['_id'] == str(query["_id"]):
+                return True
+        return False
 
     async def update_one(self, query, update, *args, **kwargs):
         users = [user async for user in self.find(query=query)]

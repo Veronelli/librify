@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Body, HTTPException, Path
+from fastapi import APIRouter, Body, HTTPException, Path, Response
 from pymongo.errors import WriteError
 from src.users.models import User, UserBase
 from fastapi import status
@@ -37,7 +37,6 @@ async def update(
 @route.delete("/delete/{id}")
 async def delete(id:Annotated[str,Path()]):
     deleted_user = await delete_user(id)
-    return {
-        "message":"User deleted",
-        "user": deleted_user
-    }
+    if deleted_user == False:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
