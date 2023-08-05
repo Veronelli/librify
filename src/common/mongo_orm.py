@@ -83,15 +83,6 @@ class MongoDB:
         """
         return await self.db[collection_name].delete_one(query)
 
-    def drop_collection(self, collection_name: str) -> None:
-        """
-        Drop (delete) a collection.
-
-        Args:
-            collection_name (str): The name of the collection.
-        """
-        collection: Collection = self.db[collection_name]
-        collection.drop()
 
 def connectMongoDB():
     return MongoDB(
