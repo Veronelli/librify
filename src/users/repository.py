@@ -94,4 +94,4 @@ async def delete_user(id: str) -> dict[str, Any]:
 
     query = {"_id": ObjectId(id)}
     response = await db.delete_document("users", query)
-    return response
+    return response.deleted_count > 0

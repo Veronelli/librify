@@ -147,3 +147,37 @@ async def test_update_user_is_failed_due_bad_payload(
 
     finally:
         await delete_user(create_user1.id)
+
+
+@mark.asyncio
+async def test_delete_user(
+    client,
+    user_1: dict[str, Any],
+    create_user,
+    delete_user):
+    create_user1 = await create_user(user_1)
+    try:
+        response = await client.delete(
+            f"/users/delete/{create_user1.id}",
+            )
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    finally:
+        await delete_user(create_user1.id)
+
+
+@mark.asyncio
+async def test_delete_user_is_failed_due_not_found_user(
+    client,
+    user_1: dict[str, Any],
+    create_user,
+    delete_user):
+    create_user1 = await create_user(user_1)
+    try:
+        response = await client.delete(
+            f"/users/delete/{str(ObjectId())}",
+            )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    finally:
+        await delete_user(create_user1.id)
