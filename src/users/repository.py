@@ -5,7 +5,7 @@ from pymongo.results import InsertOneResult
 from pymongo.errors import WriteError
 from bson import ObjectId
 from fastapi import status
-from src.users.models import User, UserBase
+from src.users.models import InputUser, User, UserBase
 from bson import ObjectId
 
 
@@ -46,7 +46,7 @@ async def find_all_users(offset: int | None = None, limit: int | None = None) ->
     """
     return await find()
 
-async def register_user(user: UserBase) -> dict[str, Any]:
+async def register_user(user: InputUser) -> dict[str, Any]:
     """
     Register a new user.
 

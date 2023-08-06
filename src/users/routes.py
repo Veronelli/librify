@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Body, HTTPException, Path, Response
 from pymongo.errors import WriteError
-from src.users.models import User, UserBase
+from src.users.models import InputUser, User, UserBase
 from fastapi import status
 from src.users.repository import find_user_by_id, find_all_users, register_user, update_user, delete_user
 
@@ -20,7 +20,7 @@ async def get_all(offset:int|None =None,limit:int|None =None):
     return users
 
 @route.post("/register", response_model=User)
-async def register(user: Annotated[UserBase, Body()])->User:
+async def register(user: Annotated[InputUser, Body()])->User:
     return await register_user(user)
 
 @route.put("/update/{id}")

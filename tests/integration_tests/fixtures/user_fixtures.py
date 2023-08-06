@@ -7,7 +7,8 @@ def user_1():
     return {
         "username": "bpitt",
         "email": "bpitt@example.com",
-        "is_active": False
+        "is_active": False,
+        "password": "TEST1"
     }
 
 @pytest.fixture
@@ -15,7 +16,8 @@ def user_2():
     return {
         "username": "jbrave",
         "email": "jbrave@example.com",
-        "is_active": False
+        "is_active": False,
+        "password": "TEST2"
     }
 
 @pytest.fixture
@@ -23,7 +25,8 @@ def user_3():
     return {
         "username": "msmith",
         "email": "msmith@example.com",
-        "is_active": False
+        "is_active": False,
+        "password": "TEST3"
     }
 
 @pytest.fixture

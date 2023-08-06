@@ -70,7 +70,8 @@ async def test_register_user(client: AsyncClient, delete_user):
         json={
             "username": "string",
             "email": "user@example.com",
-            "is_active": False
+            "is_active": False,
+            "password": "TEST1"
             }
         )
     
@@ -104,6 +105,7 @@ async def test_update_user(
             json={
                 "username": "string",
                 "email": "user@example.com",
+                "password": "TEST1"
             })
         assert response.status_code == status.HTTP_200_OK
 

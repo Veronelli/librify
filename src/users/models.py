@@ -9,6 +9,8 @@ class UserBase(BaseModel):
     email: EmailStr = Field(...)
     is_active: bool= Field(default=False)
 
+class InputUser(UserBase):
+    password: str = (...)
 
 class User(UserBase):
     id: str = Field(alias="_id")
