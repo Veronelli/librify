@@ -9,6 +9,7 @@ from src.users.models import InputUser, User, UserBase
 from bson import ObjectId
 
 
+
 async def find(query: dict[str,Any]|None=None, offset: int|None=None, limit: dict[str, Any]|None=None):
     db = connectMongoDB()
 
