@@ -183,3 +183,43 @@ async def test_delete_user_is_failed_due_not_found_user(
 
     finally:
         await delete_user(create_user1.id)
+
+
+
+@mark.asyncio
+async def test_login_user(
+    client: AsyncClient,
+    user_1: dict[str, Any],
+    create_user,
+    delete_user):
+    create_user1 = await create_user(user_1)
+    try:
+        response = await client.post(
+            url="/session/login",
+            json={
+                "email": "bpitt@example.com",
+                "password": "TEST1",
+            })
+        assert response.status_code == status.HTTP_200_OK
+
+    finally:
+        await delete_user(create_user1.id)
+
+@mark.asyncio
+async def test_login_user_is_failed_due_invalid_credential(
+    client: AsyncClient,
+    user_1: dict[str, Any],
+    create_user,
+    delete_user):
+    create_user1 = await create_user(user_1)
+    try:
+        response = await client.post(
+            url="/session/login",
+            json={
+                "email": "bpitt@example.com",
+                "password": "TEST2",
+            })
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    finally:
+        await delete_user(create_user1.id)

@@ -11,15 +11,13 @@
     * UPDATE [x]
     * DELETE [x]
 
-[ ] - Crear test de unidad <-
-
 [ ] - Script to access to the terminal
 
 [ ] - Login endpoint
 
-[ ] - Crear test de integracion
+[x] - Crear test de integracion
 
-[ ] - Refector project
+[x] - Refector project
         * Create collection constant
             ** Collection Name
             ** DB Name

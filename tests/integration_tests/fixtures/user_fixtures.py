@@ -1,6 +1,6 @@
 import pytest
-from src.users.models import UserBase
-from src.users.repository import register_user, delete_user as delete_use_repo
+from src.users.models import InputUser, UserBase
+from src.users.services import create_user as create_user_service, delete_user_by_id
 
 @pytest.fixture
 def user_1():
@@ -32,11 +32,11 @@ def user_3():
 @pytest.fixture
 def create_user():
     async def create(user):
-        return await register_user(UserBase(**user))
+        return await create_user_service(InputUser(**user))
     return create
 
 @pytest.fixture
 def delete_user():
     async def delete(id):
-        return await delete_use_repo(id)
+        return await delete_user_by_id(id)
     return delete

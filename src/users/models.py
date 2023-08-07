@@ -12,8 +12,13 @@ class UserBase(BaseModel):
 class InputUser(UserBase):
     password: str = (...)
 
+class LoginUser(BaseModel):
+    email: EmailStr
+    password: str
+
 class User(UserBase):
     id: str = Field(alias="_id")
+    password: str | None
 
     class Config:
         json_encoders = {ObjectId: str}

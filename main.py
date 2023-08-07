@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from src.config.envs import settings
 from src.users.routes import route as user_route
 from src.users.session_routes import route as session_route
 
