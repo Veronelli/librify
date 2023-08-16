@@ -1,8 +1,10 @@
-from typing import Annotated
-from fastapi import APIRouter, Body, HTTPException, Path, Response
+from typing import Annotated, Any
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Response
 from pymongo.errors import WriteError
+from src.users.dependencies import check_user
 from src.users.models import InputUser, User, UserBase
 from fastapi import status
+
 from src.users.services import get_users, get_user, create_user, update_user_by_id, delete_user_by_id
 
 route = APIRouter(prefix="/users",tags=["Users"])
@@ -13,6 +15,10 @@ async def get(id:Annotated[str,Path()]):
     if user == []:
         raise HTTPException(status_code=404)
     return user[0]
+
+@route.get("/me")
+async def me(user_info:Annotated[UserBase, Depends(check_user)]):
+    return user_info
 
 @route.get("/list")
 async def get_all(offset:int|None =None,limit:int|None =None):

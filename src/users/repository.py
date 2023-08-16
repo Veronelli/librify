@@ -10,10 +10,9 @@ from bson import ObjectId
 
 
 
-async def find(query: dict[str,Any]|None=None, offset: int|None=None, limit: dict[str, Any]|None=None):
+async def find(query: dict[str,Any]|None=None,):
     db = connectMongoDB()
-
-    users_response = await db.find_documents("users", offset=offset, limit=limit, query=query)
+    users_response = await db.find_documents("users", query=query)
     users = [user for user in users_response]
     for user in users:
         user["_id"] = str(user["_id"])

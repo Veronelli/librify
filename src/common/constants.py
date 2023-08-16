@@ -1,0 +1,2 @@
+CREDENTIALS_COLLECTION = "credenetials"
+USERS_COLLECTION = "users"

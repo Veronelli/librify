@@ -3,7 +3,10 @@ from bson import ObjectId
 from httpx import AsyncClient
 from pytest import mark
 from fastapi import status
+from src.users.session_services import login_user
 import asyncio
+
+from src.users.models import InputUser, LoginUser
 
 @mark.asyncio
 async def test_list_users(client, user_1: dict[str, Any], user_2: dict[str, Any], user_3: dict[str, Any], create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]], delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
@@ -223,3 +226,37 @@ async def test_login_user_is_failed_due_invalid_credential(
 
     finally:
         await delete_user(create_user1.id)
+
+@mark.asyncio
+async def test_get_my_user(
+    client: AsyncClient,
+    user_1: dict[str,Any],
+    user_2: dict[str, Any],
+    delete_user: Callable[[dict[str,Any]], int],
+    create_user: Callable[[dict[str,Any]], InputUser]):
+    create_user1 = await create_user(user_1)
+    create_user2 = await create_user(user_2)
+
+    payload = {
+        "email": user_1["email"],
+        "password": user_1["password"]
+    }
+    token = await login_user(payload)
+    headers = {
+        'Authorization': f'Bearer {token["token"]}'
+    }
+
+    response = await client.get(
+        "/users/me",
+        headers=headers
+        )
+    
+    try:
+        breakpoint()
+        assert response.status_code == status.HTTP_200_OK
+    finally:
+        d1 = delete_user(create_user1.id)
+        d2 = delete_user(create_user2.id)
+
+        asyncio.gather(d1, d2)
+    
