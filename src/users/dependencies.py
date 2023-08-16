@@ -14,7 +14,6 @@ async def check_user(token:Annotated[HTTPAuthorizationCredentials, Depends(http_
     token_getted = await exist_token({"token":token.credentials})
     if token_getted != []:
         user: list[User] = await find_user_by_id(token_getted[0]['user_id'])
-        print(user)
         return UserBase(**user[0].dict())
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED

@@ -6,7 +6,7 @@ from fastapi import status
 from src.users.session_services import login_user
 import asyncio
 
-from src.users.models import InputUser, LoginUser
+from src.users.models import InputUser, LoginUser, UserBase
 
 @mark.asyncio
 async def test_list_users(client, user_1: dict[str, Any], user_2: dict[str, Any], user_3: dict[str, Any], create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]], delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
@@ -236,11 +236,7 @@ async def test_get_my_user(
     create_user: Callable[[dict[str,Any]], InputUser]):
     create_user1 = await create_user(user_1)
     create_user2 = await create_user(user_2)
-
-    payload = {
-        "email": user_1["email"],
-        "password": user_1["password"]
-    }
+    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
     token = await login_user(payload)
     headers = {
         'Authorization': f'Bearer {token["token"]}'
@@ -252,7 +248,6 @@ async def test_get_my_user(
         )
     
     try:
-        breakpoint()
         assert response.status_code == status.HTTP_200_OK
     finally:
         d1 = delete_user(create_user1.id)
