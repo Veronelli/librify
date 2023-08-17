@@ -1,7 +1,7 @@
 from typing import Annotated, Any
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Response
 from pymongo.errors import WriteError
-from src.users.dependencies import check_user
+from src.users.dependencies import verify_token
 from src.users.models import InputUser, User, UserBase
 from fastapi import status
 
@@ -10,32 +10,33 @@ from src.users.services import get_users, get_user, create_user, update_user_by_
 route = APIRouter(prefix="/users",tags=["Users"])
 
 @route.get("/list/{id}")
-async def get(id:Annotated[str,Path()]):
-    user = await get_user(id)
+async def get(
+    user_info:Annotated[
+        User, Depends(verify_token(validate_user_equal=True))]):
+    user = await get_user(user_info.id)
     if user == []:
         raise HTTPException(status_code=404)
     return user[0]
 
-@route.get("/me")
-async def me(user_info:Annotated[UserBase, Depends(check_user)]):
-    return user_info
 
 @route.get("/list")
 async def get_all(offset:int|None =None,limit:int|None =None):
     users = await get_users(offset,limit)
     return users
 
+
 @route.post("/register", response_model=User)
 async def register(user: Annotated[InputUser, Body()])->User:
     return await create_user(user)
 
+
 @route.put("/update/{id}")
 async def update(
-    id: Annotated[str,Path()],
+    user_info:Annotated[User, Depends(verify_token(validate_user_equal=True))],
     user: Annotated[UserBase, Body()]
     )->User:
     try:
-        return await update_user_by_id(id, user)
+        return await update_user_by_id(user_info.id, user)
     except WriteError as e:
         raise HTTPException(e.code)
         

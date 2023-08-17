@@ -37,13 +37,19 @@ async def test_list_users(client, user_1: dict[str, Any], user_2: dict[str, Any]
 async def test_user_detail(client, user_1: dict[str, Any], user_2: dict[str, Any],create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]], delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
     create_user1 = await create_user(user_1)
     create_user2 = await create_user(user_2)
-
+    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    token = await login_user(payload)
+    headers = {
+        'Authorization': f'Bearer {token["token"]}'
+    }
     response = await client.get(
-        f"/users/list/{str(create_user2.id)}")
+        f"/users/list/{str(create_user1.id)}",
+        headers=headers
+        ),
     
     try:
-        assert response.status_code == status.HTTP_200_OK
-        assert create_user2.dict(by_alias=True) == response.json()
+        assert response[0].status_code == status.HTTP_200_OK
+        assert create_user1.dict(by_alias=True) == response[0].json()
     finally:
         d1 = delete_user(create_user1.id)
         d2 = delete_user(create_user2.id)
@@ -51,20 +57,23 @@ async def test_user_detail(client, user_1: dict[str, Any], user_2: dict[str, Any
         asyncio.gather(d1, d2, )
     
 @mark.asyncio
-async def test_user_detail_is_failed_due_not_found_user(client, user_1: dict[str, Any], user_2: dict[str, Any],create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]], delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
+async def test_user_detail_is_not_authorized(client, user_1: dict[str, Any], user_2: dict[str, Any],create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]], delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
     create_user1 = await create_user(user_1)
-    create_user2 = await create_user(user_2)
-
+    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    token = await login_user(payload)
+    headers = {
+        'Authorization': f'Bearer {token["token"]}'
+    }
     response = await client.get(
-        f"/users/list/{str(ObjectId())}")
+        f"/users/list/{str(ObjectId())}",
+        headers=headers)
     
     try:
         assert response.status_code == status.HTTP_404_NOT_FOUND
     finally:
         d1 = delete_user(create_user1.id)
-        d2 = delete_user(create_user2.id)
 
-        asyncio.gather(d1, d2)
+        asyncio.gather(d1)
     
 @mark.asyncio
 async def test_register_user(client: AsyncClient, delete_user):
@@ -102,6 +111,12 @@ async def test_update_user(
     create_user,
     delete_user):
     create_user1 = await create_user(user_1)
+    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    token = await login_user(payload)
+    headers = {
+        'Authorization': f'Bearer {token["token"]}'
+    }
+
     try:
         response = await client.put(
             f"/users/update/{create_user1.id}",
@@ -109,7 +124,9 @@ async def test_update_user(
                 "username": "string",
                 "email": "user@example.com",
                 "password": "TEST1"
-            })
+            },
+            headers=headers
+            )
         assert response.status_code == status.HTTP_200_OK
 
     finally:
@@ -122,13 +139,19 @@ async def test_update_user_is_failed_due_not_found_user(
     create_user,
     delete_user):
     create_user1 = await create_user(user_1)
+    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    token = await login_user(payload)
+    headers = {
+        'Authorization': f'Bearer {token["token"]}'
+    }
     try:
         response = await client.put(
             f"/users/update/{str(ObjectId())}",
             json={
                 "username": "string",
                 "email": "user@example.com",
-            })
+            },
+            headers=headers)
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
     finally:
@@ -136,19 +159,26 @@ async def test_update_user_is_failed_due_not_found_user(
 
 
 @mark.asyncio
-async def test_update_user_is_failed_due_bad_payload(
+async def test_update_user_is_failed_due_incorrect_authentication(
     client,
     user_1: dict[str, Any],
     create_user,
     delete_user):
     create_user1 = await create_user(user_1)
+    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    token = await login_user(payload)
+    headers = {
+        'Authorization': f'Bearer {token["token"]}'
+    }
+
     try:
         response = await client.put(
             f"/users/update/{str(ObjectId())}",
             json={
                 "username": "string",
-            })
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+            },
+            headers=headers)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
 
     finally:
         await delete_user(create_user1.id)
@@ -226,32 +256,3 @@ async def test_login_user_is_failed_due_invalid_credential(
 
     finally:
         await delete_user(create_user1.id)
-
-@mark.asyncio
-async def test_get_my_user(
-    client: AsyncClient,
-    user_1: dict[str,Any],
-    user_2: dict[str, Any],
-    delete_user: Callable[[dict[str,Any]], int],
-    create_user: Callable[[dict[str,Any]], InputUser]):
-    create_user1 = await create_user(user_1)
-    create_user2 = await create_user(user_2)
-    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
-    token = await login_user(payload)
-    headers = {
-        'Authorization': f'Bearer {token["token"]}'
-    }
-
-    response = await client.get(
-        "/users/me",
-        headers=headers
-        )
-    
-    try:
-        assert response.status_code == status.HTTP_200_OK
-    finally:
-        d1 = delete_user(create_user1.id)
-        d2 = delete_user(create_user2.id)
-
-        asyncio.gather(d1, d2)
-    
