@@ -191,9 +191,15 @@ async def test_delete_user(
     create_user,
     delete_user):
     create_user1 = await create_user(user_1)
+    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    token = await login_user(payload)
+    headers = {
+        'Authorization': f'Bearer {token["token"]}'
+    }
     try:
         response = await client.delete(
             f"/users/delete/{create_user1.id}",
+            headers=headers
             )
         assert response.status_code == status.HTTP_204_NO_CONTENT
 
@@ -208,9 +214,15 @@ async def test_delete_user_is_failed_due_not_found_user(
     create_user,
     delete_user):
     create_user1 = await create_user(user_1)
+    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    token = await login_user(payload)
+    headers = {
+        'Authorization': f'Bearer {token["token"]}'
+    }
     try:
         response = await client.delete(
             f"/users/delete/{str(ObjectId())}",
+            headers=headers
             )
         assert response.status_code == status.HTTP_404_NOT_FOUND
 

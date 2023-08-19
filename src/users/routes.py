@@ -42,8 +42,8 @@ async def update(
         
 
 @route.delete("/delete/{id}")
-async def delete(id:Annotated[str,Path()]):
-    deleted_user = await delete_user_by_id(id)
+async def delete(user_info:Annotated[User, Depends(verify_token(validate_user_equal=True))]):
+    deleted_user = await delete_user_by_id(user_info.id)
 
     if deleted_user == False:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
