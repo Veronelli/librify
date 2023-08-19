@@ -39,15 +39,16 @@ async def test_user_detail(client, user_1: dict[str, Any], user_2: dict[str, Any
     create_user2 = await create_user(user_2)
     payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
     token = await login_user(payload)
-    headers = {
-        'Authorization': f'Bearer {token["token"]}'
-    }
-    response = await client.get(
-        f"/users/list/{str(create_user1.id)}",
-        headers=headers
-        ),
     
     try:
+        assert token is not None
+        headers = {
+            'Authorization': f'Bearer {token["token"]}'
+            }
+        response = await client.get(
+            f"/users/list/{str(create_user1.id)}",
+            headers=headers
+        ),
         assert response[0].status_code == status.HTTP_200_OK
         assert create_user1.dict(by_alias=True) == response[0].json()
     finally:
@@ -61,14 +62,16 @@ async def test_user_detail_is_not_authorized(client, user_1: dict[str, Any], use
     create_user1 = await create_user(user_1)
     payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
     token = await login_user(payload)
-    headers = {
-        'Authorization': f'Bearer {token["token"]}'
-    }
-    response = await client.get(
-        f"/users/list/{str(ObjectId())}",
-        headers=headers)
-    
+
     try:
+        assert token is not None
+        headers = {
+            'Authorization': f'Bearer {token["token"]}'
+        }
+        response = await client.get(
+            f"/users/list/{str(ObjectId())}",
+            headers=headers)
+        
         assert response.status_code == status.HTTP_404_NOT_FOUND
     finally:
         d1 = delete_user(create_user1.id)
@@ -113,11 +116,13 @@ async def test_update_user(
     create_user1 = await create_user(user_1)
     payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
     token = await login_user(payload)
-    headers = {
-        'Authorization': f'Bearer {token["token"]}'
-    }
 
     try:
+        assert token is not None
+        headers = {
+            'Authorization': f'Bearer {token["token"]}'
+        }
+
         response = await client.put(
             f"/users/update/{create_user1.id}",
             json={
@@ -141,10 +146,12 @@ async def test_update_user_is_failed_due_not_found_user(
     create_user1 = await create_user(user_1)
     payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
     token = await login_user(payload)
-    headers = {
-        'Authorization': f'Bearer {token["token"]}'
-    }
+
     try:
+        assert token is not None
+        headers = {
+            'Authorization': f'Bearer {token["token"]}'
+        }
         response = await client.put(
             f"/users/update/{str(ObjectId())}",
             json={
@@ -167,11 +174,12 @@ async def test_update_user_is_failed_due_incorrect_authentication(
     create_user1 = await create_user(user_1)
     payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
     token = await login_user(payload)
-    headers = {
-        'Authorization': f'Bearer {token["token"]}'
-    }
 
     try:
+        assert token is not None
+        headers = {
+            'Authorization': f'Bearer {token["token"]}'
+        }
         response = await client.put(
             f"/users/update/{str(ObjectId())}",
             json={
@@ -193,10 +201,11 @@ async def test_delete_user(
     create_user1 = await create_user(user_1)
     payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
     token = await login_user(payload)
-    headers = {
-        'Authorization': f'Bearer {token["token"]}'
-    }
     try:
+        assert token is not None
+        headers = {
+            'Authorization': f'Bearer {token["token"]}'
+        }
         response = await client.delete(
             f"/users/delete/{create_user1.id}",
             headers=headers
@@ -220,6 +229,10 @@ async def test_delete_user_is_failed_due_not_found_user(
         'Authorization': f'Bearer {token["token"]}'
     }
     try:
+        assert token is not None
+        headers = {
+            'Authorization': f'Bearer {token["token"]}'
+        }
         response = await client.delete(
             f"/users/delete/{str(ObjectId())}",
             headers=headers

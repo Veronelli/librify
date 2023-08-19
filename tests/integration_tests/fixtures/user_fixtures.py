@@ -7,7 +7,7 @@ def user_1():
     return {
         "username": "bpitt",
         "email": "bpitt@example.com",
-        "is_active": False,
+        "is_active": True,
         "password": "TEST1"
     }
 
@@ -16,7 +16,7 @@ def user_2():
     return {
         "username": "jbrave",
         "email": "jbrave@example.com",
-        "is_active": False,
+        "is_active": True,
         "password": "TEST2"
     }
 
@@ -25,7 +25,7 @@ def user_3():
     return {
         "username": "msmith",
         "email": "msmith@example.com",
-        "is_active": False,
+        "is_active": True,
         "password": "TEST3"
     }
 

@@ -9,6 +9,7 @@ route = APIRouter(prefix="/session", tags=["UsersSession"])
 @route.post("/login")
 async def login(user: LoginUser):
     token = await login_user(user)
+
     if token is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return token

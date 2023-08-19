@@ -13,10 +13,10 @@ from src.users.session_repository import exist_token, insert_user_credential, up
 async def login_user(user: LoginUser):
     query = {"email": user.email}
     getted_user = (await find(query=query))[0]
-
+    
     if not bcrypt.checkpw(
         user.password.encode('utf-8'),
-        getted_user.password.encode('utf-8')):
+        getted_user.password.encode('utf-8')) or not getted_user.is_active:
         return None
 
     token = jwt.encode(
