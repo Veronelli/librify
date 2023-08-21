@@ -24,9 +24,11 @@ class MockUserCollection(IAsyncIOMotorClient):
         return InsertOneResult()
 
     @classmethod
-    def find(cls, query: dict[str, Any]|None=None, *args, **kwargs):
+    def find(cls, query: dict[str, Any] | None = None, *args, **kwargs):
         if query:
-            users = [user for user in MOCKED_USERS if user['_id'] == str(query.get('_id'))]
+            users = [
+                user for user in MOCKED_USERS
+                if user['_id'] == str(query.get('_id'))]
             return iterable(users)
         return iterable(MOCKED_USERS)
 
@@ -40,10 +42,18 @@ class MockUserCollection(IAsyncIOMotorClient):
         users = [user async for user in self.find(query=query)]
         if users == []:
             return UpdateResult(
-                raw_result={"n": 0, "nModified": 0, "ok": 0.0, "updatedExisting": False},
+                raw_result={
+                    "n": 0,
+                    "nModified": 0,
+                    "ok": 0.0,
+                    "updatedExisting": False},
                 acknowledged=False
             )
         return UpdateResult(
-            raw_result={"n": 0, "nModified": 1, "ok": 1.0, "updatedExisting": True},
+            raw_result={
+                "n": 0,
+                "nModified": 1,
+                "ok": 1.0,
+                "updatedExisting": True},
             acknowledged=True
         )

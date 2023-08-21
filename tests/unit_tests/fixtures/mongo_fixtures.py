@@ -1,13 +1,12 @@
 import pytest
 
-from tests.unit_tests.interfaces import IAsyncIOMotorClient
 from tests.unit_tests.mock_collection.user_collection import MockUserCollection
 
 
 @pytest.fixture
 def collection_factory():
     return {
-        "librify":{
+        "librify": {
             'users': MockUserCollection()
         },
     }
@@ -16,4 +15,3 @@ def collection_factory():
 @pytest.fixture
 def anyio_backend() -> str:
     return "asyncio"
-
