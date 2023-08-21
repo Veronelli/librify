@@ -15,6 +15,7 @@ motor = "^3.2.0"
 httpx = "^0.24.1"
 bcrypt = "^4.0.1"
 pyjwt = "^2.8.0"
+dlint = "^0.14.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest-mock = "^3.11.1"

@@ -17,11 +17,3 @@ def collection_factory():
 def anyio_backend() -> str:
     return "asyncio"
 
-@pytest.fixture
-def mock_mongo_motor_client(mocker, collection_factory):
-    mock_db = mocker.Mock()
-    client_mock = mocker.patch(
-        "motor.motor_asyncio",
-        return_value=mock_db
-        )
-    client_mock.AsyncIOMotorClient.return_value = collection_factory

@@ -13,14 +13,14 @@ from tests.unit_tests.fixtures.results.users_results import (MOCKED_USER_1,
 
 # Test create user
 @pytest.mark.anyio
-async def test_list_user_is_success(app_client: TestClient, mock_mongo_motor_client, mocked_users: list[dict[str, Any]]):
+async def test_list_user_is_success(app_client: TestClient, mocked_users: list[dict[str, Any]]):
     response = await app_client.get("/users/list")
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == mocked_users
 
 
 @pytest.mark.anyio
-async def test_get_user_is_success(app_client: TestClient, mock_mongo_motor_client, mocked_users: list[dict[str, Any]]):
+async def test_get_user_is_success(app_client: TestClient, mocked_users: list[dict[str, Any]]):
     users = mocked_users[1]
     response = await app_client.get(f"/users/list/{users['_id']}")
     assert response.status_code == status.HTTP_200_OK
@@ -28,13 +28,13 @@ async def test_get_user_is_success(app_client: TestClient, mock_mongo_motor_clie
 
 
 @pytest.mark.anyio
-async def test_get_user_is_failed_due_invalid_id(app_client: TestClient, mock_mongo_motor_client):
+async def test_get_user_is_failed_due_invalid_id(app_client: TestClient):
     response = await app_client.get(f"/users/list/{ObjectId()}")
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.anyio
-async def test_register_user_is_success(app_client: TestClient, mock_mongo_motor_client, create_user:dict[str, Any]):
+async def test_register_user_is_success(app_client: TestClient, create_user:dict[str, Any]):
     user = create_user
     response = await app_client.post(
         f"/users/register",
@@ -46,16 +46,19 @@ async def test_register_user_is_success(app_client: TestClient, mock_mongo_motor
 
 
 @pytest.mark.anyio
-async def test_register_user_is_failed_due_bad_request(app_client: TestClient, mock_mongo_motor_client, bad_payload):
+async def test_register_user_is_failed_due_bad_request(app_client: TestClient, bad_payload):
     user = bad_payload
     response = await app_client.post(
-        f"/users/register",
+        "/users/register",
         json=user)
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 @pytest.mark.anyio
-async def test_update_user_is_success(app_client: TestClient, mock_mongo_motor_client, mocked_users, create_user:dict[str, Any]):
+async def test_update_user_is_success(
+        app_client: TestClient,
+        mocked_users,
+        create_user: dict[str, Any]):
     user = create_user
     response = await app_client.put(
         f"/users/update/{mocked_users[2]['_id']}",
@@ -67,24 +70,23 @@ async def test_update_user_is_success(app_client: TestClient, mock_mongo_motor_c
 
 
 @pytest.mark.anyio
-async def test_update_user_is_failed_due_not_found_or_not_updated(app_client: TestClient, mock_mongo_motor_client, create_user:dict[str, Any]):
+async def test_update_user_is_failed_due_not_found_or_not_updated(
+        app_client: TestClient, create_user: dict[str, Any]):
     user = create_user
     response = await app_client.put(
         f"/users/update/{str(ObjectId())}",
         json=user)
-    content = response.json()
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.anyio
-async def test_delete_user_is_success(app_client, mock_mongo_motor_client, mocked_users):
+async def test_delete_user_is_success(app_client, mocked_users):
     user = mocked_users[1]
     response = await app_client.delete(f"/users/delete/{user['_id']}")
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
 
 @pytest.mark.anyio
-async def test_delete_user_is_failed_due_not_found_user(app_client, mock_mongo_motor_client):
+async def test_delete_user_is_failed_due_not_found_user(app_client):
     response = await app_client.delete(f"/users/delete/{str(ObjectId())}")
     assert response.status_code == status.HTTP_404_NOT_FOUND
-
