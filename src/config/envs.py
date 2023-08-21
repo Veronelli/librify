@@ -1,5 +1,6 @@
 from pydantic import BaseSettings
 
+
 class MongoDBSetting(BaseSettings):
     MONGO_INITDB_ROOT_USERNAME: str
     MONGO_INITDB_ROOT_PASSWORD: str

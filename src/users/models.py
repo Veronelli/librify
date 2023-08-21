@@ -1,7 +1,7 @@
-from pydantic import BaseModel, EmailStr, Field, validator
+from uuid import UUID
 
 from bson import ObjectId
-from uuid import UUID
+from pydantic import BaseModel, EmailStr, Field, validator
 
 
 class UserBase(BaseModel):

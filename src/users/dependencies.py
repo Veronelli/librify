@@ -1,12 +1,12 @@
 from typing import Annotated, Any
+
 from bson import ObjectId
 from fastapi import Depends, HTTPException, Path, status
-
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from src.users.models import User
 
-from src.users.session_repository import exist_token
+from src.users.models import User
 from src.users.repository import find_user_by_id
+from src.users.session_repository import exist_token
 
 http_bearer = HTTPBearer()
 

@@ -1,7 +1,8 @@
 import asyncio
-from httpx import AsyncClient
+
 import pytest
 import pytest_asyncio
+from httpx import AsyncClient
 
 pytest_plugins = [
     "tests.integration_tests.fixtures.user_fixtures",

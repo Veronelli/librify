@@ -1,9 +1,11 @@
 from typing import Any
-from pymongo.results import UpdateResult
 
 from bson import ObjectId
+from pymongo.results import UpdateResult
+
 from tests.unit_tests.fixtures.results.users_results import MOCKED_USERS
 from tests.unit_tests.interfaces import IAsyncIOMotorClient
+
 
 async def iterable(list):
     for item in list:

@@ -1,6 +1,9 @@
 import pytest
+
 from src.users.models import InputUser, UserBase
-from src.users.services import create_user as create_user_service, delete_user_by_id
+from src.users.services import create_user as create_user_service
+from src.users.services import delete_user_by_id
+
 
 @pytest.fixture
 def user_1():

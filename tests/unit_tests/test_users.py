@@ -1,10 +1,15 @@
 from typing import Any
-from fastapi.testclient import TestClient
-from fastapi import status
+
 import pytest
 from bson import ObjectId
+from fastapi import status
+from fastapi.testclient import TestClient
 
-from tests.unit_tests.fixtures.results.users_results import MOCKED_USER_1, MOCKED_USER_2, MOCKED_USER_3, MOCKED_USER_4
+from tests.unit_tests.fixtures.results.users_results import (MOCKED_USER_1,
+                                                             MOCKED_USER_2,
+                                                             MOCKED_USER_3,
+                                                             MOCKED_USER_4)
+
 
 # Test create user
 @pytest.mark.anyio

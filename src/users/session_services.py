@@ -1,13 +1,15 @@
 import datetime
 from typing import Any
 
-from bson import ObjectId
-from src.config.envs import settings
-from src.users.repository import find
-from src.users.models import LoginUser
 import bcrypt
 import jwt
-from src.users.session_repository import exist_token, insert_user_credential, update_user
+from bson import ObjectId
+
+from src.config.envs import settings
+from src.users.models import LoginUser
+from src.users.repository import find
+from src.users.session_repository import (exist_token, insert_user_credential,
+                                          update_user)
 
 
 async def login_user(user: LoginUser):

@@ -1,10 +1,11 @@
 from typing import Any
+
 import pytest
 from fastapi import FastAPI
+from fastapi.testclient import TestClient
 from httpx import AsyncClient
 
 from main import app
-from fastapi.testclient import TestClient
 
 pytest_plugins = [
     "tests.unit_tests.fixtures.user_fixtures",

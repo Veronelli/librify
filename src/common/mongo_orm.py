@@ -1,8 +1,9 @@
-from pymongo import MongoClient
 from typing import Any
+
+import motor.motor_asyncio
+from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.results import DeleteResult
-import motor.motor_asyncio
 
 from src.config.envs import settings
 

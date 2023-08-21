@@ -1,9 +1,10 @@
 from typing import Any
-from src.common.constants import CREDENTIALS_COLLECTION
 
+from src.common.constants import CREDENTIALS_COLLECTION
 from src.common.mongo_orm import connectMongoDB
 from src.users.types import UserCredentials
 from tests.unit_tests.mock_collection.user_collection import InsertOneResult
+
 
 async def exist_token(query: dict[str,Any])->dict[str, Any]:
     db = connectMongoDB()

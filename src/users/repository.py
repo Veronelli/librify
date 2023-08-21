@@ -1,13 +1,12 @@
 from typing import Any
 
-from src.common.mongo_orm import connectMongoDB
-from pymongo.results import InsertOneResult
-from pymongo.errors import WriteError
 from bson import ObjectId
 from fastapi import status
-from src.users.models import InputUser, User, UserBase
-from bson import ObjectId
+from pymongo.errors import WriteError
+from pymongo.results import InsertOneResult
 
+from src.common.mongo_orm import connectMongoDB
+from src.users.models import InputUser, User, UserBase
 
 
 async def find(query: dict[str,Any]|None=None,):

@@ -1,12 +1,14 @@
+import asyncio
 from typing import Any, Callable, Coroutine
+
 from bson import ObjectId
+from fastapi import status
 from httpx import AsyncClient
 from pytest import mark
-from fastapi import status
-from src.users.session_services import login_user
-import asyncio
 
 from src.users.models import InputUser, LoginUser, UserBase
+from src.users.session_services import login_user
+
 
 @mark.asyncio
 async def test_list_users(client, user_1: dict[str, Any], user_2: dict[str, Any], user_3: dict[str, Any], create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]], delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):

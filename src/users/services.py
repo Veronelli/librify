@@ -1,12 +1,10 @@
-from src.users.models import InputUser
-from src.users.repository import (
-    find_all_users,
-    find_user_by_id,
-    register_user,
-    delete_user,
-    update_user)
 import bcrypt
+
 from src.config.envs import settings
+from src.users.models import InputUser
+from src.users.repository import (delete_user, find_all_users, find_user_by_id,
+                                  register_user, update_user)
+
 
 async def get_users(
     offset:int|None=None,

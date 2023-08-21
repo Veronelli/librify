@@ -1,11 +1,13 @@
 from typing import Annotated, Any
-from fastapi import APIRouter, Body, Depends, HTTPException, Path, Response
+
+from fastapi import (APIRouter, Body, Depends, HTTPException, Path, Response,
+                     status)
 from pymongo.errors import WriteError
+
 from src.users.dependencies import verify_token
 from src.users.models import InputUser, User, UserBase
-from fastapi import status
-
-from src.users.services import get_users, get_user, create_user, update_user_by_id, delete_user_by_id
+from src.users.services import (create_user, delete_user_by_id, get_user,
+                                get_users, update_user_by_id)
 
 route = APIRouter(prefix="/users",tags=["Users"])
 
