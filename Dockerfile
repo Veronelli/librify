@@ -4,6 +4,9 @@ FROM python:3.11-alpine
 # Set the working directory inside the container
 WORKDIR /app
 
+# Install git
+RUN apk add git
+
 # Install system dependencies needed for building Python packages and virtualenv
 RUN apk add --no-cache build-base libffi-dev openssl-dev python3-dev
 
