@@ -1,6 +1,6 @@
 import pytest
 
-from src.users.models import InputUser, UserBase
+from src.users.models import InputUser
 from src.users.services import create_user as create_user_service
 from src.users.services import delete_user_by_id
 
@@ -14,6 +14,7 @@ def user_1():
         "password": "TEST1"
     }
 
+
 @pytest.fixture
 def user_2():
     return {
@@ -22,6 +23,7 @@ def user_2():
         "is_active": True,
         "password": "TEST2"
     }
+
 
 @pytest.fixture
 def user_3():
@@ -32,11 +34,13 @@ def user_3():
         "password": "TEST3"
     }
 
+
 @pytest.fixture
 def create_user():
     async def create(user):
         return await create_user_service(InputUser(**user))
     return create
+
 
 @pytest.fixture
 def delete_user():

@@ -6,12 +6,18 @@ from fastapi import status
 from httpx import AsyncClient
 from pytest import mark
 
-from src.users.models import InputUser, LoginUser, UserBase
+from src.users.models import LoginUser
 from src.users.session_services import login_user
 
 
 @mark.asyncio
-async def test_list_users(client, user_1: dict[str, Any], user_2: dict[str, Any], user_3: dict[str, Any], create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]], delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
+async def test_list_users(
+        client,
+        user_1: dict[str, Any],
+        user_2: dict[str, Any],
+        user_3: dict[str, Any],
+        create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]],
+        delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
     create_user1 = await create_user(user_1)
     create_user2 = await create_user(user_2)
     create_user3 = await create_user(user_3)
@@ -36,12 +42,19 @@ async def test_list_users(client, user_1: dict[str, Any], user_2: dict[str, Any]
 
 
 @mark.asyncio
-async def test_user_detail(client, user_1: dict[str, Any], user_2: dict[str, Any],create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]], delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
+async def test_user_detail(
+        client,
+        user_1: dict[str, Any],
+        user_2: dict[str, Any],
+        create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]],
+        delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
     create_user1 = await create_user(user_1)
     create_user2 = await create_user(user_2)
-    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    payload = LoginUser(
+        email=user_1["email"],
+        password=user_1["password"])
     token = await login_user(payload)
-    
+
     try:
         assert token is not None
         headers = {
@@ -58,11 +71,18 @@ async def test_user_detail(client, user_1: dict[str, Any], user_2: dict[str, Any
         d2 = delete_user(create_user2.id)
 
         asyncio.gather(d1, d2, )
-    
+
+
 @mark.asyncio
-async def test_user_detail_is_not_authorized(client, user_1: dict[str, Any], user_2: dict[str, Any],create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]], delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
+async def test_user_detail_is_not_authorized(
+        client,
+        user_1: dict[str, Any],
+        create_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]],
+        delete_user: Callable[..., Coroutine[Any, Any, dict[str, Any]]]):
     create_user1 = await create_user(user_1)
-    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    payload = LoginUser(
+        email=user_1["email"],
+        password=user_1["password"])
     token = await login_user(payload)
 
     try:
@@ -73,13 +93,14 @@ async def test_user_detail_is_not_authorized(client, user_1: dict[str, Any], use
         response = await client.get(
             f"/users/list/{str(ObjectId())}",
             headers=headers)
-        
+
         assert response.status_code == status.HTTP_404_NOT_FOUND
     finally:
         d1 = delete_user(create_user1.id)
 
         asyncio.gather(d1)
-    
+
+
 @mark.asyncio
 async def test_register_user(client: AsyncClient, delete_user):
     response = await client.post(
@@ -91,14 +112,16 @@ async def test_register_user(client: AsyncClient, delete_user):
             "password": "TEST1"
             }
         )
-    
+
     try:
         assert response.status_code == status.HTTP_200_OK
     finally:
         await delete_user(response.json()['_id'])
 
+
 @mark.asyncio
-async def test_register_user_is_failed_due_bad_request(client: AsyncClient, delete_user):
+async def test_register_user_is_failed_due_bad_request(
+        client: AsyncClient):
     response = await client.post(
         "/users/register",
         json={
@@ -111,12 +134,14 @@ async def test_register_user_is_failed_due_bad_request(client: AsyncClient, dele
 
 @mark.asyncio
 async def test_update_user(
-    client,
-    user_1: dict[str, Any],
-    create_user,
-    delete_user):
+        client,
+        user_1: dict[str, Any],
+        create_user,
+        delete_user):
     create_user1 = await create_user(user_1)
-    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    payload = LoginUser(
+        email=user_1["email"],
+        password=user_1["password"])
     token = await login_user(payload)
 
     try:
@@ -139,14 +164,18 @@ async def test_update_user(
     finally:
         await delete_user(create_user1.id)
 
+
 @mark.asyncio
 async def test_update_user_is_failed_due_not_found_user(
-    client,
-    user_1: dict[str, Any],
-    create_user,
-    delete_user):
+        client,
+        user_1: dict[str, Any],
+        create_user,
+        delete_user):
     create_user1 = await create_user(user_1)
-    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    payload = LoginUser(
+        email=user_1["email"],
+        password=user_1["password"])
+
     token = await login_user(payload)
 
     try:
@@ -169,12 +198,15 @@ async def test_update_user_is_failed_due_not_found_user(
 
 @mark.asyncio
 async def test_update_user_is_failed_due_incorrect_authentication(
-    client,
-    user_1: dict[str, Any],
-    create_user,
-    delete_user):
+        client,
+        user_1: dict[str, Any],
+        create_user,
+        delete_user):
     create_user1 = await create_user(user_1)
-    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    payload = LoginUser(
+        email=user_1["email"],
+        password=user_1["password"])
+
     token = await login_user(payload)
 
     try:
@@ -196,12 +228,15 @@ async def test_update_user_is_failed_due_incorrect_authentication(
 
 @mark.asyncio
 async def test_delete_user(
-    client,
-    user_1: dict[str, Any],
-    create_user,
-    delete_user):
+        client,
+        user_1: dict[str, Any],
+        create_user,
+        delete_user):
     create_user1 = await create_user(user_1)
-    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    payload = LoginUser(
+        email=user_1["email"],
+        password=user_1["password"])
+
     token = await login_user(payload)
     try:
         assert token is not None
@@ -220,12 +255,15 @@ async def test_delete_user(
 
 @mark.asyncio
 async def test_delete_user_is_failed_due_not_found_user(
-    client,
-    user_1: dict[str, Any],
-    create_user,
-    delete_user):
+        client,
+        user_1: dict[str, Any],
+        create_user,
+        delete_user):
     create_user1 = await create_user(user_1)
-    payload = LoginUser(email=user_1["email"], password=user_1["password"]) 
+    payload = LoginUser(
+        email=user_1["email"],
+        password=user_1["password"])
+
     token = await login_user(payload)
     headers = {
         'Authorization': f'Bearer {token["token"]}'
@@ -245,13 +283,12 @@ async def test_delete_user_is_failed_due_not_found_user(
         await delete_user(create_user1.id)
 
 
-
 @mark.asyncio
 async def test_login_user(
-    client: AsyncClient,
-    user_1: dict[str, Any],
-    create_user,
-    delete_user):
+        client: AsyncClient,
+        user_1: dict[str, Any],
+        create_user,
+        delete_user):
     create_user1 = await create_user(user_1)
     try:
         response = await client.post(
@@ -265,12 +302,13 @@ async def test_login_user(
     finally:
         await delete_user(create_user1.id)
 
+
 @mark.asyncio
 async def test_login_user_is_failed_due_invalid_credential(
-    client: AsyncClient,
-    user_1: dict[str, Any],
-    create_user,
-    delete_user):
+        client: AsyncClient,
+        user_1: dict[str, Any],
+        create_user,
+        delete_user):
     create_user1 = await create_user(user_1)
     try:
         response = await client.post(

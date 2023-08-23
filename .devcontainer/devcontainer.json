@@ -25,7 +25,8 @@
 		"vscode": {
 			"extensions": [
 				"ms-python.python",
-				"ms-python.isort"
+				"ms-python.isort",
+				"ms-python.flake8"
 			]
 		}
 	}

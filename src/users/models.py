@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from bson import ObjectId
 from pydantic import BaseModel, EmailStr, Field, validator
 
@@ -7,14 +5,17 @@ from pydantic import BaseModel, EmailStr, Field, validator
 class UserBase(BaseModel):
     username: str = Field(...)
     email: EmailStr = Field(...)
-    is_active: bool= Field(default=True)
+    is_active: bool = Field(default=True)
+
 
 class InputUser(UserBase):
     password: str = (...)
 
+
 class LoginUser(BaseModel):
     email: EmailStr
     password: str
+
 
 class User(UserBase):
     id: str = Field(alias="_id")

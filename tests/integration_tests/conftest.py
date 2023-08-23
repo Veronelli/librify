@@ -16,10 +16,12 @@ def event_loop():
     yield loop
     loop.close()
 
+
 @pytest.fixture
 def app():
     from main import app as application
     return application
+
 
 @pytest_asyncio.fixture
 async def client(app):

@@ -8,6 +8,7 @@ class AdminRoles(str, Enum):
     ADMIN_DELETE = "ADMIN_DELETE"
     ADMIN_UPDATE = "ADMIN_UPDATE"
 
+
 class UserType(str, Enum):
     BASE_USER = "BASE_USER"
     PREMIUM_USER = "PREMIUM_USER"

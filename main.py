@@ -8,6 +8,7 @@ app = FastAPI()
 app.include_router(user_route)
 app.include_router(session_route)
 
+
 @app.get("/")
 async def root():
     return {"message": "server is running"}

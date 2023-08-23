@@ -9,7 +9,7 @@ from src.common.mongo_orm import connectMongoDB
 from src.users.models import InputUser, User, UserBase
 
 
-async def find(query: dict[str,Any]|None=None,):
+async def find(query: dict[str, Any] | None = None,):
     db = connectMongoDB()
     users_response = await db.find_documents("users", query=query)
     users = [user for user in users_response]
@@ -17,6 +17,7 @@ async def find(query: dict[str,Any]|None=None,):
         user["_id"] = str(user["_id"])
 
     return [User(**user) for user in users]
+
 
 async def find_user_by_id(id: str) -> dict[str, Any]:
     """
@@ -32,18 +33,23 @@ async def find_user_by_id(id: str) -> dict[str, Any]:
     return await find(query=query)
 
 
-async def find_all_users(offset: int | None = None, limit: int | None = None) -> list[User]:
+async def find_all_users(
+        offset: int | None = None,
+        limit: int | None = None) -> list[User]:
     """
     Find all users.
 
     Args:
-        offset (int | None, optional): The number of documents to skip. Defaults to None.
-        limit (int | None, optional): The maximum number of documents to return. Defaults to None.
+        offset (int | None, optional): The number of documents to skip.
+        Defaults to None.
+        limit (int | None, optional): The maximum number of documents to
+        return. Defaults to None.
 
     Returns:
         list[User]: A list of User objects.
     """
     return await find()
+
 
 async def register_user(user: InputUser) -> dict[str, Any]:
     """
@@ -60,6 +66,7 @@ async def register_user(user: InputUser) -> dict[str, Any]:
     user_response = User(**user.dict(), _id=str(response.inserted_id))
     return user_response
 
+
 async def update_user(id: str, user: UserBase) -> dict[str, Any]:
     """
     Update a user.
@@ -74,11 +81,17 @@ async def update_user(id: str, user: UserBase) -> dict[str, Any]:
     db = connectMongoDB()
 
     query = {"_id": ObjectId(id)}
-    updated = await db.update_document("users", query, user.dict(by_alias=True))
+    updated = await db.update_document(
+        "users",
+        query,
+        user.dict(by_alias=True))
     if not updated.raw_result['updatedExisting']:
-        raise WriteError(code=status.HTTP_404_NOT_FOUND, error="Not found user")
+        raise WriteError(
+            code=status.HTTP_404_NOT_FOUND,
+            error="Not found user")
     user_response = User(**user.dict(by_alias=True), _id=id)
     return user_response
+
 
 async def delete_user(id: str) -> dict[str, Any]:
     """
